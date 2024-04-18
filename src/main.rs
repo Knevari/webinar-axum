@@ -1,5 +1,6 @@
 mod db;
 mod rest;
+mod view;
 
 use std::net::SocketAddr;
 
@@ -11,6 +12,7 @@ use sqlx::SqlitePool;
 fn router(connection_pool: SqlitePool) -> Router {
     Router::new()
         .nest_service("/books", rest::books_service())
+        .nest_service("/", view::view_service())
         .layer(Extension(connection_pool))
 }
 

@@ -4,7 +4,6 @@ use sqlx::{FromRow, Row, SqlitePool};
 
 pub async fn init_db() -> Result<SqlitePool> {
     let database_url = std::env::var("DATABASE_URL")?;
-    println!("database_Url {}", database_url);
     let connection_pool = SqlitePool::connect(&database_url).await?;
     sqlx::migrate!().run(&connection_pool).await?;
     Ok(connection_pool)
@@ -85,6 +84,7 @@ mod test {
         dotenv::dotenv().ok();
         let cnn = init_db().await.unwrap();
         let book = book_by_id(&cnn, 1).await.unwrap();
+
         assert_eq!(1, book.id);
         assert_eq!("Hands-on Rust", book.title);
         assert_eq!("Wolverson, Herbert", book.author);
